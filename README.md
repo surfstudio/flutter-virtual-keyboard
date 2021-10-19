@@ -4,7 +4,7 @@
 
 This package made by [Surf](https://surf.ru).
 
-## About
+## Description
 
 Keyboard widget for use in widget tree
 
@@ -18,6 +18,104 @@ dependencies:
 ```
 
 You can use both `stable` and `dev` versions of the package listed above in the badges bar.
+
+## Example
+
+```dart
+static const _maxCount = 4;
+
+var _symbols = '';
+
+int get _symbolsCount => _symbols.length;
+
+@override
+Widget build(BuildContext context) {
+  return Scaffold(
+    appBar: AppBar(
+      title: Text(widget.title),
+    ),
+    body: Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(_symbols),
+          const SizedBox(height: 20),
+          Padding(
+            padding: const EdgeInsets.all(50),
+            child: VirtualKeyboardWidget(
+              virtualKeyboardEffect: VirtualKeyboardEffect.keyRipple,
+              keyboardKeys: numericKeyboardKeys,
+              onPressKey: _handleTapKey,
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
+  }
+
+VirtualKeyboardKey _buildClear() {
+  return VirtualKeyboardDeleteKey(
+    useAsKey: true,
+    widget: InkWell(
+      splashColor: Colors.green,
+      onTap: () {
+        _symbols = '';
+        numericKeyboardKeys[3][2] = buildDelete();
+        setState(() {});
+      },
+      child: const SizedBox(
+        height: 50,
+        child: Center(child: Text('Clear')),
+      ),
+    ),
+  );
+}
+
+void _handleTapKey(VirtualKeyboardKey key) {
+  if (key is VirtualKeyboardDeleteKey) {
+    if (_symbolsCount == 0) {
+      return;
+    }
+
+    _symbols = _symbols.substring(0, _symbolsCount - 1);
+  } else if (key is VirtualKeyboardNumberKey) {
+    _symbols += key.value;
+  }
+
+  if (_symbolsCount >= _maxCount) {
+    numericKeyboardKeys[3][2] = _buildClear();
+  } else {
+    numericKeyboardKeys[3][2] = buildDelete();
+  }
+
+  setState(() {});
+}
+}
+
+/// Клавиши для цифровой экранной клавиатуры
+List<List<VirtualKeyboardKey>> numericKeyboardKeys = [
+  for (var i = 1; i < 4; i++)
+    [
+      for (var j = 1; j < 4; j++) VirtualKeyboardNumberKey((i * j).toString()),
+    ],
+  [
+    VirtualKeyboardEmptyStubKey(),
+    VirtualKeyboardNumberKey(
+      '0',
+      widget: const Text('Zero'),
+      keyDecoration: BoxDecoration(
+        color: Colors.red.withOpacity(.1),
+      ),
+    ),
+    buildDelete(),
+  ],
+];
+
+VirtualKeyboardKey buildDelete() {
+  return VirtualKeyboardDeleteKey(widget: const Text('delete'));
+}
+```
 
 ## Changelog
 
