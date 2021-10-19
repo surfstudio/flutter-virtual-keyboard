@@ -17,23 +17,6 @@ import 'package:ink_widget/ink_widget.dart';
 import 'package:virtual_keyboard/src/virtual_keyboard_effect.dart';
 
 class TableButton extends StatelessWidget {
-  const TableButton({
-    required this.child,
-    Key? key,
-    this.width,
-    this.height,
-    this.onTap,
-    this.padding,
-    this.keyDecoration,
-    this.inkShapeRipple,
-    this.inkShapeBorder,
-    VirtualKeyboardEffect? virtualKeyboardEffect,
-    bool? useAsKey,
-  })  : virtualKeyboardEffect =
-            virtualKeyboardEffect ?? VirtualKeyboardEffect.none,
-        useAsKey = useAsKey ?? false,
-        super(key: key);
-
   /// Button Width
   final double? width;
 
@@ -60,12 +43,29 @@ class TableButton extends StatelessWidget {
   /// [ShapeBorder] for InkWell
   final ShapeBorder? inkShapeBorder;
 
+  const TableButton({
+    required this.child,
+    Key? key,
+    this.width,
+    this.height,
+    this.onTap,
+    this.padding,
+    this.keyDecoration,
+    this.inkShapeRipple,
+    this.inkShapeBorder,
+    VirtualKeyboardEffect? virtualKeyboardEffect,
+    bool? useAsKey,
+  })  : virtualKeyboardEffect =
+            virtualKeyboardEffect ?? VirtualKeyboardEffect.none,
+        useAsKey = useAsKey ?? false,
+        super(key: key);
+
   @override
   Widget build(BuildContext context) {
     if (useAsKey) {
       return child;
     }
-
+    // ignore: avoid-returning-widgets
     return _buildContainer(
       child: Padding(
         padding: padding ?? EdgeInsets.zero,
@@ -82,7 +82,6 @@ class TableButton extends StatelessWidget {
     );
   }
 
-  // ignore: avoid-returning-widgets
   Widget _buildContainer({required Widget child}) {
     switch (virtualKeyboardEffect) {
       case VirtualKeyboardEffect.keyboardRipple:
