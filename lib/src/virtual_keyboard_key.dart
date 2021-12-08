@@ -18,16 +18,6 @@ import 'package:flutter/widgets.dart';
 
 /// Keyboard key base class
 abstract class VirtualKeyboardKey {
-  VirtualKeyboardKey({
-    required this.widget,
-    String? id,
-    bool? useAsKey,
-    this.keyDecoration,
-    this.inkShapeRipple,
-    this.inkShapeBorder,
-  })  : id = id ?? _r.nextDouble().toString(),
-        useAsKey = useAsKey ?? false;
-
   static final _r = Random();
 
   /// id keys
@@ -49,19 +39,34 @@ abstract class VirtualKeyboardKey {
   final ShapeBorder? inkShapeBorder;
 
   @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  int get hashCode => id.hashCode;
+
+  VirtualKeyboardKey({
+    required this.widget,
+    String? id,
+    bool? useAsKey,
+    this.keyDecoration,
+    this.inkShapeRipple,
+    this.inkShapeBorder,
+  })  : id = id ?? _r.nextDouble().toString(),
+        useAsKey = useAsKey ?? false;
+
+  @override
   // ignore: avoid_equals_and_hash_code_on_mutable_classes , avoid_annotating_with_dynamic
   bool operator ==(dynamic other) {
     // ignore: avoid_dynamic_calls
     return id == other.id;
   }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => id.hashCode;
 }
 
 /// Keyboard key with value
 abstract class VirtualKeyboardValueKey extends VirtualKeyboardKey {
+  final String _value;
+
+  /// Key value
+  String get value => _value;
+
   VirtualKeyboardValueKey(
     this._value, {
     String? id,
@@ -78,15 +83,15 @@ abstract class VirtualKeyboardValueKey extends VirtualKeyboardKey {
           inkShapeRipple: inkShapeRipple,
           inkShapeBorder: inkShapeBorder,
         );
-
-  final String _value;
-
-  /// Key value
-  String get value => _value;
 }
 
 /// Numeric key
 class VirtualKeyboardNumberKey extends VirtualKeyboardValueKey {
+  int? get number => _parsedVale ??= int.tryParse(value);
+
+  int? _parsedVale;
+
+  /// Get a numeric representation of the key value
   VirtualKeyboardNumberKey(
     String value, {
     String? id,
@@ -104,11 +109,6 @@ class VirtualKeyboardNumberKey extends VirtualKeyboardValueKey {
           inkShapeRipple: inkShapeRipple,
           inkShapeBorder: inkShapeBorder,
         );
-
-  int? _parsedVale;
-
-  /// Get a numeric representation of the key value
-  int? get number => _parsedVale ??= int.tryParse(value);
 }
 
 /// Blank dummy key
@@ -119,6 +119,8 @@ class VirtualKeyboardEmptyStubKey extends VirtualKeyboardKey {
 
 /// Delete key
 class VirtualKeyboardDeleteKey extends VirtualKeyboardKey {
+  static const _defaultId = 'delete';
+
   VirtualKeyboardDeleteKey({
     String? id,
     Widget? widget,
@@ -134,6 +136,4 @@ class VirtualKeyboardDeleteKey extends VirtualKeyboardKey {
           inkShapeRipple: inkShapeRipple,
           inkShapeBorder: inkShapeBorder,
         );
-
-  static const _defaultId = 'delete';
 }

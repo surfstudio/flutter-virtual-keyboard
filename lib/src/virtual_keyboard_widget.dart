@@ -25,16 +25,6 @@ import 'package:virtual_keyboard/src/virtual_keyboard_key.dart';
 typedef KeyboardPressCallback = void Function(VirtualKeyboardKey keyboardKey);
 
 class VirtualKeyboardWidget extends StatefulWidget {
-  const VirtualKeyboardWidget({
-    required this.keyboardKeys,
-    Key? key,
-    this.buttonWidth,
-    this.buttonHeight,
-    this.onPressKey,
-    this.keyTextStyle,
-    this.virtualKeyboardEffect,
-  }) : super(key: key);
-
   /// Keyboard data list
   final List<List<VirtualKeyboardKey>> keyboardKeys;
 
@@ -52,6 +42,16 @@ class VirtualKeyboardWidget extends StatefulWidget {
 
   /// Effect of pressing a button
   final VirtualKeyboardEffect? virtualKeyboardEffect;
+
+  const VirtualKeyboardWidget({
+    required this.keyboardKeys,
+    Key? key,
+    this.buttonWidth,
+    this.buttonHeight,
+    this.onPressKey,
+    this.keyTextStyle,
+    this.virtualKeyboardEffect,
+  }) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
